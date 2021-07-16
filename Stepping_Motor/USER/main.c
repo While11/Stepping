@@ -1,49 +1,46 @@
-/**
-**************************************************************************************
-* @file    main.c
-* @author  SieYuan
-* @version V1.0
-* @date    2021-01-19
-* @brief   ÂÆûÁé∞	S ÂΩ¢Âä†ÂáèÈÄüÁÆóÊ≥ï
-**************************************************************************************
-*/
 #include	"stm32f4xx.h"
 #include  "sys.h"
 #include  "led.h"
 #include  "key.h"
-#include  "exti.h"
 #include  "delay.h"
 #include  "X_Step_Motor.h"
 #include "usart.h"
+#include "adc.h"
+u16 adcx;
+float temp;
 char COSTT_end=0;
 char peace=0;
-u32 X_CosTTNum = 0;										// X ÂåÄÈÄüÈò∂ÊÆµÁöÑËÑâÂÜ≤‰∏™Êï∞
+u32 X_CosTTNum = 0;										// X ‘»ÀŸΩ◊∂Œµƒ¬ˆ≥Â∏ˆ ˝
 int main(void)
 {
 	
+	NVIC_PriorityGroupConfig(NVIC_PriorityGroup_2);//…Ë÷√œµÕ≥÷–∂œ”≈œ»º∂∑÷◊È2
 	LED_Init();
-//	KEY_Init();
-	EXTIx_Init();
+	delay_init(168);    //≥ı ºªØ—” ±∫Ø ˝
+	uart_init(115200);	//≥ı ºªØ¥Æø⁄≤®Ãÿ¬ Œ™115200
 	X_GPIO_Init();
-	delay_init(168);
-	uart_init(115200);
-
-	X_Calculate_SpeedList();//ÁîüÊàêÂä†ÂáèÈÄüÈò∂ÊÆµÁöÑÈÄüÂ∫¶Ë°®
-//	printf("%d",0x01);
-	X_PWM_S_Output_Right();//ÈÄÜÊó∂ÈíàÂêØÂä®
-	X_COSTT_Output_Right(3200-151);
-	//	while(COSTT_end!=1);//Á≠âÂæÖend‰∏∫1Ôºåend‰∏∫1ÂêéÂÅúÊ≠¢
-//	COSTT_end=0;//Â¶ÇÊûúend‰∏çÁ≠â‰∫é0ÂàôÂÅúÊ≠¢
-////	X_PWM_S_Output_Left();
-//	X_COSTT_Output_Left(3200-151);
-	peace=1;//ÂáèÈÄüÂÅúÊ≠¢
-//	delay_ms(650);
-//	X_PWM_S_Output_Right();//ÈÄÜÊó∂ÈíàÂêØÂä®
-//	X_COSTT_Output_Right(202-101);
-//	X_Uniform_Output_Left(1600);
-//	X_Uniform_Output_Right(1600);
-//	X_Stop();
-	
-	while(1);
+	Adc_Init();         //≥ı ºªØADC
+	X_Calculate_SpeedList();//…˙≥…º”ºıÀŸΩ◊∂ŒµƒÀŸ∂»±Ì
+	X_PWM_S_Output_Right();//ƒÊ ±’Î∆Ù∂Ø
+	while(1)
+	{ 
+		
+	//	printf("%d",0x01);
+		
+//		X_COSTT_Output_Right(3200-151);
+		//	while(COSTT_end!=1);//µ»¥˝endŒ™1£¨endŒ™1∫ÛÕ£÷π
+	//	COSTT_end=0;//»Áπ˚end≤ªµ»”⁄0‘ÚÕ£÷π
+	////	X_PWM_S_Output_Left();
+	//	X_COSTT_Output_Left(3200-151);
+//		peace=1;//ºıÀŸÕ£÷π
+//		adcx=Get_Adc_Average(ADC_Channel_5,20);//ªÒ»°Õ®µ¿5µƒ◊™ªª÷µ£¨20¥Œ»°∆Ωæ˘
+//		printf("%d\r\n",adcx);    //œ‘ æADCC≤…—˘∫Ûµƒ‘≠ º÷µ
+//		temp=(float)adcx*(3.3/4096);          //ªÒ»°º∆À„∫Ûµƒ¥¯–° ˝µƒ µº µÁ—π÷µ£¨±»»Á3.1111  //12ŒªADC
+//		printf("%f\r\n",temp);
+//		delay_ms(250);	                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                      
+	}
 }
-/****************************END OF FILE****************************/
+
+
+
+

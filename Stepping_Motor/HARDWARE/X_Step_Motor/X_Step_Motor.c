@@ -106,7 +106,7 @@ void X_Calculate_SpeedList(void)
 	}
 	}//i_X范围为0-X_Speed.X_Step-1
 
-void X_PWM_S_Output_Right(void)//顺时针
+void X_PWM_S_Output_Right(void)//逆时针
 {
 	X_Step_Position = 0;
 	X_Motion_Status = X_ACCEL;
@@ -122,7 +122,7 @@ void X_PWM_S_Output_Right(void)//顺时针
 	TIM_Cmd(TIM3, ENABLE);
 }
 
-void X_PWM_S_Output_Left(void)//逆时针
+void X_PWM_S_Output_Left(void)//顺时针
 {
 	X_Step_Position = 0;
 	X_Motion_Status = X_ACCEL;
@@ -138,12 +138,14 @@ void X_PWM_S_Output_Left(void)//逆时针
 	TIM_Cmd(TIM3, ENABLE);
 }
 
-void X_COSTT_Output_Right(u32 X_PulseNum)//最大速度匀速运行
+void X_COSTT_Output_Inverted(u32 X_PulseNum)//最大速度匀速运行
 {
 	X_Step_Position = 0;
 	X_Motion_Status = X_COSTT;
 	X_CosTTNum = X_PulseNum;
 	
+	GPIO_ResetBits(GPIOA, GPIO_Pin_7);
+	delay_us(125);   //  > 125us
 //	GPIO_SetBits(GPIOA, GPIO_Pin_7);
 //	delay_us(100);
 //	GPIO_ResetBits(GPIOA, GPIO_Pin_7);
@@ -155,7 +157,7 @@ void X_COSTT_Output_Right(u32 X_PulseNum)//最大速度匀速运行
 //	TIM_Cmd(TIM3, ENABLE);
 }
 
-void X_COSTT_Output_Left(u32 X_PulseNum)
+void X_COSTT_Output_clockwise(u32 X_PulseNum)//顺时针
 {
 	X_Step_Position = 0;
 	X_Motion_Status = X_COSTT;
@@ -172,39 +174,39 @@ void X_COSTT_Output_Left(u32 X_PulseNum)
 //	TIM_Cmd(TIM3, ENABLE);
 }
 
-void X_Uniform_Output_Right(u32 X_PulseNum)//最大速度匀速运行
-{
-	X_Step_Position = 0;
-	X_Motion_Status = X_UNIFM;
-	X_CosTTNum = X_PulseNum;
-	
-	GPIO_SetBits(GPIOA, GPIO_Pin_7);
-	delay_us(100);
-	GPIO_ResetBits(GPIOA, GPIO_Pin_7);
-	delay_us(125);   //  > 125us
-	
-	X_TIM3_Config();
-	TIM_ClearITPendingBit( TIM3, TIM_IT_CC1);
-	TIM_ITConfig( TIM3, TIM_IT_CC1, ENABLE);
-	TIM_Cmd(TIM3, ENABLE);
-}
+//void X_Uniform_Output_Right(u32 X_PulseNum)//最大速度匀速运行
+//{
+//	X_Step_Position = 0;
+//	X_Motion_Status = X_UNIFM;
+//	X_CosTTNum = X_PulseNum;
+//	
+//	GPIO_SetBits(GPIOA, GPIO_Pin_7);
+//	delay_us(100);
+//	GPIO_ResetBits(GPIOA, GPIO_Pin_7);
+//	delay_us(125);   //  > 125us
+//	
+//	X_TIM3_Config();
+//	TIM_ClearITPendingBit( TIM3, TIM_IT_CC1);
+//	TIM_ITConfig( TIM3, TIM_IT_CC1, ENABLE);
+//	TIM_Cmd(TIM3, ENABLE);
+//}
 
-void X_Uniform_Output_Left(u32 X_PulseNum)
-{
-	X_Step_Position = 0;
-	X_Motion_Status = X_UNIFM;
-	X_CosTTNum = X_PulseNum;
-	
-	GPIO_ResetBits(GPIOA, GPIO_Pin_7);
-	delay_us(100);   
-	GPIO_SetBits(GPIOA, GPIO_Pin_7);
-	delay_us(125);		//  > 125us
-	
-	X_TIM3_Config();
-	TIM_ClearITPendingBit( TIM3, TIM_IT_CC1);
-	TIM_ITConfig( TIM3, TIM_IT_CC1, ENABLE);
-	TIM_Cmd(TIM3, ENABLE);
-}
+//void X_Uniform_Output_Left(u32 X_PulseNum)
+//{
+//	X_Step_Position = 0;
+//	X_Motion_Status = X_UNIFM;
+//	X_CosTTNum = X_PulseNum;
+//	
+//	GPIO_ResetBits(GPIOA, GPIO_Pin_7);
+//	delay_us(100);   
+//	GPIO_SetBits(GPIOA, GPIO_Pin_7);
+//	delay_us(125);		//  > 125us
+//	
+//	X_TIM3_Config();
+//	TIM_ClearITPendingBit( TIM3, TIM_IT_CC1);
+//	TIM_ITConfig( TIM3, TIM_IT_CC1, ENABLE);
+//	TIM_Cmd(TIM3, ENABLE);
+//}
 void X_Stop(void)
 {
 	TIM_Cmd(TIM3, DISABLE);		// 关闭定时器

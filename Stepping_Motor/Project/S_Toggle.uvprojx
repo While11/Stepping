@@ -339,7 +339,7 @@
               <MiscControls></MiscControls>
               <Define>USE_STDPERIPH_DRIVER,STM32F40_41xxx</Define>
               <Undefine></Undefine>
-              <IncludePath>..\CORE;..\FWLIB\inc;..\HARDWARE\Y_Step_Motor;..\HARDWARE\LED;..\HARDWARE\KEY;..\USER\delay;..\USER\EXTI;..\USER\sys;..\USER;..\USER\sys_run;..\HARDWARE\X_Step_Motor;..\HARDWARE\Z_Step_Motor;..\HARDWARE\Claw_Step_Motor;..\USER\data_process;..\HARDWARE\usart;..\HARDWARE\Command</IncludePath>
+              <IncludePath>..\CORE;..\FWLIB\inc;..\HARDWARE\Y_Step_Motor;..\HARDWARE\LED;..\HARDWARE\KEY;..\USER\delay;..\USER\EXTI;..\USER\sys;..\USER;..\USER\sys_run;..\HARDWARE\X_Step_Motor;..\HARDWARE\Z_Step_Motor;..\HARDWARE\Claw_Step_Motor;..\USER\data_process;..\HARDWARE\usart;..\HARDWARE\Command;..\HARDWARE\ADC</IncludePath>
             </VariousControls>
           </Cads>
           <Aads>
@@ -507,6 +507,11 @@
               <FileName>command.c</FileName>
               <FileType>1</FileType>
               <FilePath>..\HARDWARE\Command\command.c</FilePath>
+            </File>
+            <File>
+              <FileName>adc.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\HARDWARE\ADC\adc.c</FilePath>
             </File>
           </Files>
         </Group>

@@ -15,10 +15,10 @@ typedef struct{
 }X_SpeedList_TypeDef;
 #define		X_TIM3_FREQ							(84000000 / X_TIM3_Prescaler)		// 2MHz
 #define		X_TIM3_Pulse						(X_TIM3_FREQ / 500)
-#define		X_Accel_Step						100.0f
+#define		X_Accel_Step						50.0f
 #define		X_SpeedList_LEN					((u8)X_Accel_Step)
-#define		X_FREQ_MIN							200.0f
-#define		X_FREQ_MAX							32000.0f
+#define		X_FREQ_MIN							500.0f
+#define		X_FREQ_MAX							6400.0f
 #define		X_JERK									4.0f
 
 // Motor State
@@ -44,8 +44,8 @@ void X_GPIO_Init(void);			//GPIO
 void X_TIM3_Config(void);		// TIM
 void X_PWM_S_Output_Left(void);
 void X_PWM_S_Output_Right(void);
-void X_COSTT_Output_Right(u32 X_PulseNum);
-void X_COSTT_Output_Left(u32 X_PulseNum);
+void X_COSTT_Output_Inverted(u32 X_PulseNum);
+void X_COSTT_Output_clockwise(u32 X_PulseNum);
 void X_Stop(void);
 void X_TIM3_IRQHandler(void);
 
