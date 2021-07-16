@@ -1,11 +1,15 @@
 #include "command.h"
 #include "X_Step_Motor.h"
 #include "adc.h"
+#include "led.h"
+#include "usart.h"
 extern u16 adcx;
 extern float temp;
 float angle,angle_last=0,angle_first;
 float delt,delt_last=0;
 u32 Pulse=0;
+extern u32 X_CosTTNum;
+
 //TIM4 CH3 PB8
 void TIM4_Config(void)
 {
@@ -38,6 +42,7 @@ void TIM4_Config(void)
 		NVIC_Init( &NVIC_InitStructure);	
 		
 		TIM_ClearFlag(TIM4, TIM_FLAG_Update);
+		  	
 	
 	// 开启定时器更新中断
 	  TIM_ITConfig(TIM4,TIM_IT_Update,ENABLE);
@@ -53,25 +58,24 @@ void  TIM4_IRQHandler (void)
 	static int count=0;
 	if ( TIM_GetITStatus( TIM4, TIM_IT_Update) != RESET ) 
 	{	
+//		cnt++;
+		TIM_ClearITPendingBit(TIM4 , TIM_IT_Update);  	
+		
 		count++;
     adcx=Get_Adc_Average(ADC_Channel_5,20);//获取通道5的转换值，20次取平均
-		temp=(float)adcx*(3.3/4096);          //获取计算后的带小数的实际电压值，比如3.1111  //12位ADC
-		angle=   ;
+		angle=(float)adcx*(360.0/4096)-angle0;          //获取计算后的带小数的实际电压值，比如3.1111  //12位ADC
+		printf("%f\r\n",angle);
 		if(count==1)
 		{
 				angle_first=90.0-angle;
 			  angle_last=angle_first;
 		}
 		Pulse=(180.0/2*angle_first)*(angle-angle_last)/0.056;
+		X_CosTTNum =Pulse;
 		angle_last=angle;
-		if(angle-angle_last>0)
-		{
-				X_COSTT_Output_Inverted(Pulse);//逆时针转
-		}
-		else
-		{
-		    X_COSTT_Output_clockwise(Pulse);//顺时针转
-		}
-		TIM_ClearITPendingBit(TIM4 , TIM_IT_Update);  		 
+		X_COSTT_Output_Inverted(Pulse);//逆时针转
+		
+		
+		
 	}		 	
 }

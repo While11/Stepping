@@ -6,6 +6,8 @@
 #include  "X_Step_Motor.h"
 #include "usart.h"
 #include "adc.h"
+#include "command.h"
+#include "oled.h"
 u16 adcx;
 float temp;
 char COSTT_end=0;
@@ -14,17 +16,21 @@ u32 X_CosTTNum = 0;										// X 匀速阶段的脉冲个数
 int main(void)
 {
 	
+	
 	NVIC_PriorityGroupConfig(NVIC_PriorityGroup_2);//设置系统中断优先级分组2
 	LED_Init();
 	delay_init(168);    //初始化延时函数
 	uart_init(115200);	//初始化串口波特率为115200
+	
 	X_GPIO_Init();
+	OLED_Init();
 	Adc_Init();         //初始化ADC
+	TIM4_Config();
 	X_Calculate_SpeedList();//生成加减速阶段的速度表
 	X_PWM_S_Output_Right();//逆时针启动
 	while(1)
 	{ 
-		
+//		printf("%d\r\n",1);
 	//	printf("%d",0x01);
 		
 //		X_COSTT_Output_Right(3200-151);

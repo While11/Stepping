@@ -6,5 +6,6 @@
 
 #define TIM4_Prescaler  84
 #define TIM4_Period    65535
+void TIM4_Config(void);
 
 #endif

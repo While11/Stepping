@@ -102,7 +102,7 @@ void X_Calculate_SpeedList(void)
 		X_Fre_List[i_x] = X_Speed.X_Fre_Min + molecule_x / denominator_x;
 		X_Toggle_Pulse[i_x] = (u16)(X_TIM3_FREQ / X_Fre_List[i_x]);
 //		printf("%d",1);
-		printf("%d step: frequency: %.2f, pulse:%d.\r\n", i_x, X_Fre_List[i_x], X_Toggle_Pulse[i_x]);
+//		printf("%d step: frequency: %.2f, pulse:%d.\r\n", i_x, X_Fre_List[i_x], X_Toggle_Pulse[i_x]);
 	}
 	}//i_X范围为0-X_Speed.X_Step-1
 

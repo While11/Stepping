@@ -339,7 +339,7 @@
               <MiscControls></MiscControls>
               <Define>STM32F40_41xxx,USE_STDPERIPH_DRIVER</Define>
               <Undefine></Undefine>
-              <IncludePath>..\CORE;..\SYSTEM\delay;..\SYSTEM\sys;..\SYSTEM\usart;..\USER;..\FWLIB\inc;..\HARDWARE\ADC;..\HARDWARE\Command;..\HARDWARE\KEY;..\HARDWARE\LED;..\HARDWARE\X_Step_Motor</IncludePath>
+              <IncludePath>..\CORE;..\SYSTEM\delay;..\SYSTEM\sys;..\SYSTEM\usart;..\USER;..\FWLIB\inc;..\HARDWARE\ADC;..\HARDWARE\Command;..\HARDWARE\KEY;..\HARDWARE\LED;..\HARDWARE\X_Step_Motor;..\HARDWARE\OLED</IncludePath>
             </VariousControls>
           </Cads>
           <Aads>
@@ -647,6 +647,11 @@
               <FileName>X_Step_Motor.c</FileName>
               <FileType>1</FileType>
               <FilePath>..\HARDWARE\X_Step_Motor\X_Step_Motor.c</FilePath>
+            </File>
+            <File>
+              <FileName>oled.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\HARDWARE\OLED\oled.c</FilePath>
             </File>
           </Files>
         </Group>

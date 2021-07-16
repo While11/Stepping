@@ -41,3 +41,5 @@
 ..\obj\command.o: C:\Keil_v5\ARM\ARMCC\Bin\..\include\stdio.h
 ..\obj\command.o: ..\SYSTEM\delay\delay.h
 ..\obj\command.o: ..\HARDWARE\ADC\adc.h
+..\obj\command.o: ..\HARDWARE\LED\led.h
+..\obj\command.o: ..\SYSTEM\usart\usart.h

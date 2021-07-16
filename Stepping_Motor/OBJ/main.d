@@ -43,3 +43,6 @@
 ..\obj\main.o: C:\Keil_v5\ARM\ARMCC\Bin\..\include\stdio.h
 ..\obj\main.o: ..\SYSTEM\usart\usart.h
 ..\obj\main.o: ..\HARDWARE\ADC\adc.h
+..\obj\main.o: ..\HARDWARE\Command\command.h
+..\obj\main.o: ..\HARDWARE\OLED\oled.h
+..\obj\main.o: C:\Keil_v5\ARM\ARMCC\Bin\..\include\stdlib.h

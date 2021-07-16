@@ -17,7 +17,7 @@ Library Manager: ArmAr.exe V5.06 update 6 (build 750)
 Hex Converter:   FromElf.exe V5.06 update 6 (build 750)
 CPU DLL:         SARMCM3.DLL V5.31.0.0
 Dialog DLL:      DCM.DLL V1.17.3.0
-Target DLL:      STLink\ST-LINKIII-KEIL_SWO.dll V3.0.7.0
+Target DLL:      CMSIS_AGDI.dll V1.32.6.0
 Dialog DLL:      TCM.DLL V1.46.0.0
  
 <h2>Project:</h2>
@@ -28,23 +28,21 @@ Project File Date:  07/16/2021
 *** Using Compiler 'V5.06 update 6 (build 750)', folder: 'C:\Keil_v5\ARM\ARMCC\Bin'
 Build target 'Template'
 compiling command.c...
-..\HARDWARE\Command\command.h(10): warning:  #1-D: last line of file ends without a newline
+..\HARDWARE\Command\command.h(11): warning:  #1-D: last line of file ends without a newline
   #endif
-..\HARDWARE\ADC\adc.h(10): warning:  #1-D: last line of file ends without a newline
+..\HARDWARE\ADC\adc.h(11): warning:  #1-D: last line of file ends without a newline
   #endif
-..\HARDWARE\Command\command.c(59): error:  #29: expected an expression
-  		angle=   ;
-..\HARDWARE\Command\command.c(62): warning:  #1035-D: single-precision operand implicitly converted to double-precision
+..\HARDWARE\Command\command.c(70): warning:  #1035-D: single-precision operand implicitly converted to double-precision
   				angle_first=90.0-angle;
-..\HARDWARE\Command\command.c(77): warning:  #1-D: last line of file ends without a newline
+..\HARDWARE\Command\command.c(81): warning:  #1-D: last line of file ends without a newline
   }
-..\HARDWARE\Command\command.c: 4 warnings, 1 error
-compiling X_Step_Motor.c...
-compiling main.c...
-..\HARDWARE\ADC\adc.h(10): warning:  #1-D: last line of file ends without a newline
-  #endif
-main.c: 1 warning, 0 errors
-"..\OBJ\Template.axf" - 1 Error(s), 5 Warning(s).
+..\HARDWARE\Command\command.c(58): warning:  #177-D: variable "cnt"  was declared but never referenced
+  	static int count=0,cnt=0;
+..\HARDWARE\Command\command.c: 5 warnings, 0 errors
+linking...
+Program Size: Code=18150 RO-data=6594 RW-data=5288 ZI-data=3304  
+FromELF: creating hex file...
+"..\OBJ\Template.axf" - 0 Error(s), 5 Warning(s).
 
 <h2>Software Packages used:</h2>
 
@@ -57,8 +55,7 @@ Package Vendor: Keil
   C:\Users\86139\AppData\Local\Arm\Packs\Keil\STM32F4xx_DFP\2.15.0\Drivers\CMSIS\Device\ST\STM32F4xx\Include
 
 <h2>Collection of Component Files used:</h2>
-Target not created.
-Build Time Elapsed:  00:00:02
+Build Time Elapsed:  00:00:03
 </pre>
 </body>
 </html>
