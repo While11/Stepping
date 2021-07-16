@@ -214,9 +214,9 @@ void X_Stop(void)
 	
 }
 
-void Change_Speed(float Speed)
-{
-		if()
+//void Change_Speed(float Speed)
+//{
+//		if()
 
 
 
@@ -225,7 +225,7 @@ void Change_Speed(float Speed)
 
 
 
-}
+//}
 
 
 /******************** X - IRQ *********************/
