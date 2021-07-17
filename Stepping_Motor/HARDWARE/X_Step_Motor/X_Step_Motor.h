@@ -18,7 +18,7 @@ typedef struct{
 #define		X_Accel_Step						50.0f
 #define		X_SpeedList_LEN					((u8)X_Accel_Step)
 #define		X_FREQ_MIN							500.0f
-#define		X_FREQ_MAX							6400.0f
+#define		X_FREQ_MAX							3200.0f
 #define		X_JERK									4.0f
 
 // Motor State

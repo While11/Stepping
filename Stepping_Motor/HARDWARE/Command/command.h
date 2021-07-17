@@ -4,8 +4,8 @@
 #include "stm32f4xx.h"
 
 
-#define TIM4_Prescaler  84
-#define TIM4_Period    65535
+#define TIM4_Prescaler  840
+#define TIM4_Period    100//10ms
 void TIM4_Config(void);
 
 #endif

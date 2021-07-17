@@ -8,43 +8,32 @@
 #include "adc.h"
 #include "command.h"
 #include "oled.h"
+float angle,angle_last=0.0,angle_first=0.0;
 u16 adcx;
 float temp;
 char COSTT_end=0;
 char peace=0;
 u32 X_CosTTNum = 0;										// X 匀速阶段的脉冲个数
+char flag_angle=1;
 int main(void)
 {
 	
 	
 	NVIC_PriorityGroupConfig(NVIC_PriorityGroup_2);//设置系统中断优先级分组2
-	LED_Init();
+
 	delay_init(168);    //初始化延时函数
 	uart_init(115200);	//初始化串口波特率为115200
+	LED_Init();
+	OLED_Init();
+	
 	
 	X_GPIO_Init();
-	OLED_Init();
 	Adc_Init();         //初始化ADC
-	TIM4_Config();
+	TIM4_Config();      //摆角定时采样
 	X_Calculate_SpeedList();//生成加减速阶段的速度表
-	X_PWM_S_Output_Right();//逆时针启动
-	while(1)
-	{ 
-//		printf("%d\r\n",1);
-	//	printf("%d",0x01);
-		
-//		X_COSTT_Output_Right(3200-151);
-		//	while(COSTT_end!=1);//等待end为1，end为1后停止
-	//	COSTT_end=0;//如果end不等于0则停止
-	////	X_PWM_S_Output_Left();
-	//	X_COSTT_Output_Left(3200-151);
-//		peace=1;//减速停止
-//		adcx=Get_Adc_Average(ADC_Channel_5,20);//获取通道5的转换值，20次取平均
-//		printf("%d\r\n",adcx);    //显示ADCC采样后的原始值
-//		temp=(float)adcx*(3.3/4096);          //获取计算后的带小数的实际电压值，比如3.1111  //12位ADC
-//		printf("%f\r\n",temp);
-//		delay_ms(250);	                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                      
-	}
+	X_PWM_S_Output_Right();//逆时针启动：控制电机的TIM3初始化
+	while(1);
+
 }
 
 

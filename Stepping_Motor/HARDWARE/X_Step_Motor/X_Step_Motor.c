@@ -7,10 +7,18 @@
 #include "X_Step_Motor.h"
 #include "usart.h"
 #include  "led.h"
+#include "adc.h"
+int cnt=0;
+extern float angle,angle_last;
+extern float angle,angle_last,angle_first;
+extern u16 adcx;
+extern u32 Pulse;
+extern char flag_angle;
 X_SpeedList_TypeDef	X_Speed;
 extern char COSTT_end;
 extern char peace;
 char Accel_flag=0;
+char flag_pulse=0;
 
 u32 X_Step_Position = 0;			// 当前位置
 u8	X_Motion_Status = 0;			// 0:停止，1:加速，2:匀速，3:减速
@@ -140,21 +148,24 @@ void X_PWM_S_Output_Left(void)//顺时针
 
 void X_COSTT_Output_Inverted(u32 X_PulseNum)//最大速度匀速运行
 {
+	cnt++;
+	if(X_PulseNum>60)
+	{
+		flag_pulse=0;
 	X_Step_Position = 0;
 	X_Motion_Status = X_COSTT;
 	X_CosTTNum = X_PulseNum;
-	
 	GPIO_ResetBits(GPIOA, GPIO_Pin_7);
 	delay_us(125);   //  > 125us
-//	GPIO_SetBits(GPIOA, GPIO_Pin_7);
-//	delay_us(100);
-//	GPIO_ResetBits(GPIOA, GPIO_Pin_7);
-//	delay_us(125);   //  > 125us
-//	
-//	X_TIM3_Config();
-//	TIM_ClearITPendingBit( TIM3, TIM_IT_CC1);
-//	TIM_ITConfig( TIM3, TIM_IT_CC1, ENABLE);
-//	TIM_Cmd(TIM3, ENABLE);
+		printf("%d\r\n",cnt);
+	}
+	else 
+	{
+	 flag_pulse++;
+	 if(flag_pulse==3)
+	 X_Motion_Status = X_DECEL;
+	}
+	
 }
 
 void X_COSTT_Output_clockwise(u32 X_PulseNum)//顺时针
@@ -163,50 +174,12 @@ void X_COSTT_Output_clockwise(u32 X_PulseNum)//顺时针
 	X_Motion_Status = X_COSTT;
 	X_CosTTNum = X_PulseNum;
 	
-//	GPIO_ResetBits(GPIOA, GPIO_Pin_7);
-//	delay_us(100);   
+
 	GPIO_SetBits(GPIOA, GPIO_Pin_7);
 	delay_us(125);		//  > 125us
-	
-//	X_TIM3_Config();
-//	TIM_ClearITPendingBit( TIM3, TIM_IT_CC1);
-//	TIM_ITConfig( TIM3, TIM_IT_CC1, ENABLE);
-//	TIM_Cmd(TIM3, ENABLE);
 }
 
-//void X_Uniform_Output_Right(u32 X_PulseNum)//最大速度匀速运行
-//{
-//	X_Step_Position = 0;
-//	X_Motion_Status = X_UNIFM;
-//	X_CosTTNum = X_PulseNum;
-//	
-//	GPIO_SetBits(GPIOA, GPIO_Pin_7);
-//	delay_us(100);
-//	GPIO_ResetBits(GPIOA, GPIO_Pin_7);
-//	delay_us(125);   //  > 125us
-//	
-//	X_TIM3_Config();
-//	TIM_ClearITPendingBit( TIM3, TIM_IT_CC1);
-//	TIM_ITConfig( TIM3, TIM_IT_CC1, ENABLE);
-//	TIM_Cmd(TIM3, ENABLE);
-//}
 
-//void X_Uniform_Output_Left(u32 X_PulseNum)
-//{
-//	X_Step_Position = 0;
-//	X_Motion_Status = X_UNIFM;
-//	X_CosTTNum = X_PulseNum;
-//	
-//	GPIO_ResetBits(GPIOA, GPIO_Pin_7);
-//	delay_us(100);   
-//	GPIO_SetBits(GPIOA, GPIO_Pin_7);
-//	delay_us(125);		//  > 125us
-//	
-//	X_TIM3_Config();
-//	TIM_ClearITPendingBit( TIM3, TIM_IT_CC1);
-//	TIM_ITConfig( TIM3, TIM_IT_CC1, ENABLE);
-//	TIM_Cmd(TIM3, ENABLE);
-//}
 void X_Stop(void)
 {
 	TIM_Cmd(TIM3, DISABLE);		// 关闭定时器
@@ -216,18 +189,6 @@ void X_Stop(void)
 	
 }
 
-//void Change_Speed(float Speed)
-//{
-//		if()
-
-
-
-
-
-
-
-
-//}
 
 
 /******************** X - IRQ *********************/
@@ -255,15 +216,7 @@ void X_TIM3_IRQHandler(void)
 				else
 				{
 					X_TIM_Pulse = X_Toggle_Pulse[X_Step_Position - 1] / 2;		// 加速阶段第50步，配置好下一个状态
-					if (X_CosTTNum > 0)
-					{
-						X_Motion_Status = X_COSTT;
-						//TIM_Pulse = Toggle_Pulse[50] / 2; 		// 相当于保持上一个 TIM_Pulse = Toggle_Pulse[50] / 2; 
-					}
-					else
-					{
-						X_Motion_Status = X_DECEL;
-					}
+				  X_Motion_Status = X_COSTT;	
 					X_Step_Position = 0;
 					
 				}
@@ -271,20 +224,18 @@ void X_TIM3_IRQHandler(void)
 			else if (X_Motion_Status == X_COSTT)
 			{
 				X_Step_Position++;			// 当前将要执行的步数 Step_Position - 1 是已经执行的步数
-				X_TIM_Pulse = X_Toggle_Pulse[X_SpeedList_LEN - 1] / 2;
-				if (X_Step_Position == X_CosTTNum)
+				//前4周一个频率,中间4周一个频率，后四周一个频率
+				if(cnt<=250)
+				{X_TIM_Pulse = X_Toggle_Pulse[X_SpeedList_LEN - 1] / 2;}
+				else if(cnt>250&&cnt<=370)
 				{
-          COSTT_end=1;
-					if(peace==0)
-					{
-					GPIO_ResetBits(GPIOA,GPIO_Pin_6 );
-					}
-					else 
-					{
-						X_Motion_Status = X_DECEL;
-					  X_Step_Position = 0;
-					}
+				X_TIM_Pulse = X_Toggle_Pulse[X_SpeedList_LEN - 2] / 2;
 				}
+				else if(cnt>370)
+				{
+				X_TIM_Pulse = X_Toggle_Pulse[X_SpeedList_LEN - 3] / 2;
+				}
+        
 			}
 			else if (X_Motion_Status == X_DECEL)
 			{

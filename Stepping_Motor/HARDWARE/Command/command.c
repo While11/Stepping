@@ -5,28 +5,21 @@
 #include "usart.h"
 extern u16 adcx;
 extern float temp;
-float angle,angle_last=0,angle_first;
+extern float angle,angle_last,angle_first;
 float delt,delt_last=0;
 u32 Pulse=0;
+extern char flag_angle;
 extern u32 X_CosTTNum;
+float k=0.0,k1=0.0;
 
 //TIM4 CH3 PB8
 void TIM4_Config(void)
 {
 
-//		GPIO_InitTypeDef	GPIO_InitStructure;
+
 	  TIM_TimeBaseInitTypeDef		TIM_TimeBaseStructure;
 	  NVIC_InitTypeDef	        NVIC_InitStructure;
-    
-//	  RCC_AHB1PeriphClockCmd(	RCC_AHB1Periph_GPIOB, ENABLE);
-//	  GPIO_PinAFConfig(GPIOB, GPIO_PinSource8, GPIO_AF_TIM4);
-//		GPIO_InitStructure.GPIO_Pin = GPIO_Pin_8;		// TIM4_CH3 - PB8
-//		GPIO_InitStructure.GPIO_Mode = GPIO_Mode_AF;			// 复用
-//		GPIO_InitStructure.GPIO_Speed = GPIO_Speed_50MHz;
-//		GPIO_InitStructure.GPIO_OType = GPIO_OType_PP;		// 推挽复用输出
-//		GPIO_InitStructure.GPIO_PuPd = GPIO_PuPd_UP;			// 上拉
-//		GPIO_Init(GPIOB, &GPIO_InitStructure);
-	  
+
 	  RCC_APB1PeriphClockCmd( RCC_APB1Periph_TIM4, ENABLE);
 		TIM_TimeBaseStructure.TIM_Prescaler = TIM4_Prescaler - 1;
 		TIM_TimeBaseStructure.TIM_Period = TIM4_Period;
@@ -42,11 +35,8 @@ void TIM4_Config(void)
 		NVIC_Init( &NVIC_InitStructure);	
 		
 		TIM_ClearFlag(TIM4, TIM_FLAG_Update);
-		  	
-	
 	// 开启定时器更新中断
 	  TIM_ITConfig(TIM4,TIM_IT_Update,ENABLE);
-	
 	// 使能定时器
 		TIM_Cmd(TIM4, ENABLE);
 
@@ -55,23 +45,36 @@ void TIM4_Config(void)
 
 void  TIM4_IRQHandler (void)
 {
-	static int count=0;
+   static float count=0;
 	if ( TIM_GetITStatus( TIM4, TIM_IT_Update) != RESET ) 
 	{	
-//		cnt++;
-		TIM_ClearITPendingBit(TIM4 , TIM_IT_Update);  	
-		
+    TIM_ClearITPendingBit(TIM4 , TIM_IT_Update);  
 		count++;
     adcx=Get_Adc_Average(ADC_Channel_5,20);//获取通道5的转换值，20次取平均
 		angle=(float)adcx*(360.0/4096)-angle0;          //获取计算后的带小数的实际电压值，比如3.1111  //12位ADC
-		printf("%f\r\n",angle);
+//    if(angle>=89&&angle<=91)
+//			cnt++;
+		//		printf("%f\r\n",angle);
 		if(count==1)
 		{
 				angle_first=90.0-angle;
-			  angle_last=angle_first;
+			  angle_last=angle-2;
+			k=180.0/(2*angle_first);
+			k1=k;
+//			printf("%f\r\n",angle);
+//			printf("%f\r\n",angle_first);
 		}
-		Pulse=(180.0/2*angle_first)*(angle-angle_last)/0.056;
-		X_CosTTNum =Pulse;
+		if((angle-angle_last)>=0)
+		{
+			Pulse=((180.0/(2*angle_first))*(angle-angle_last))/0.056;
+		}
+		else
+		{
+		  Pulse=((180.0/(2*angle_first))*(angle_last-angle))/0.056;
+		}
+		
+//		printf("%f\r\n",angle-angle_last);
+//		printf("%d\r\n",Pulse);
 		angle_last=angle;
 		X_COSTT_Output_Inverted(Pulse);//逆时针转
 		
